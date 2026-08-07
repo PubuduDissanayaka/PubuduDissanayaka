@@ -12,4 +12,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ok
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate the snake SVG
+        uses: Platane/snk@v3
+        with:
+          github_user_name: PubuduDissanayaka
+          outputs: |
+            dist/github-snake.svg
+            dist/github-snake-dark.svg?palette=github-dark
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to output branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          publish_branch: output
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
